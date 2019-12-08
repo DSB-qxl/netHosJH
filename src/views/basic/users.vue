@@ -2,9 +2,6 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="userQuery.name.value" placeholder="账号、姓名、身份证" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <!--<el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
-      </el-select>-->
       <el-select v-model="userQuery.type" placeholder="用户类型" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in userTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
@@ -20,7 +17,7 @@
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
         导出
       </el-button>
-      <el-checkbox v-model="userQuery.status" class="filter-item" style="margin-left:15px;" @change="handleFilter">
+      <el-checkbox v-model="userQuery.status" true-label="1" false-label="0" class="filter-item" style="margin-left:15px;" @change="handleFilter">
         不显示停用账户
       </el-checkbox>
     </div>
@@ -103,9 +100,6 @@
         <el-form-item label="账号" prop="account">
           <el-input v-model="temp.account" />
         </el-form-item>
-        <!--<el-form-item label="密码" prop="password">
-          <el-input v-model="temp.password" />
-        </el-form-item>-->
         <el-form-item label="姓名" prop="name">
           <el-input v-model="temp.name" />
         </el-form-item>
@@ -115,23 +109,6 @@
         <el-form-item label="手机号" prop="mobile">
           <el-input v-model="temp.mobile" />
         </el-form-item>
-        <!--<el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
-        </el-form-item>
-        <el-form-item label="账号" prop="account">
-          <el-input v-model="temp.account" />
-        </el-form-item>
-        <el-form-item label="Status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Imp">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
-        </el-form-item>
-        <el-form-item label="Remark">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -141,16 +118,6 @@
           提交
         </el-button>
       </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -212,14 +179,14 @@ export default {
       total: 0,
       count: 0,
       listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
-      },
+      // listQuery: {
+      //   page: 1,
+      //   limit: 20,
+      //   importance: undefined,
+      //   title: undefined,
+      //   type: undefined,
+      //   sort: '+id'
+      // },
       userQuery: {
         page: 1,
         limit: 20,
@@ -232,21 +199,10 @@ export default {
         status: undefined,
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
-      calendarTypeOptions,
       userTypeOptions,
       sortOptions: [{ label: '正序排列', key: '+id' }, { label: '倒序排列', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
-      // temp: {
-      //   id: undefined,
-      //   importance: 1,
-      //   remark: '',
-      //   timestamp: new Date(),
-      //   title: '',
-      //   user_type: '',
-      //   status: 'published'
-      // },
       temp: {
         account: '',
         password: '',
@@ -262,7 +218,7 @@ export default {
         create: '新建用户'
       },
       dialogPvVisible: false,
-      pvData: [],
+      //表单校验
       rules: {
         type: [{ required: true, message: '请选择用户类型', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
@@ -313,11 +269,6 @@ export default {
         this.list = response.data.list
         this.total = response.data.count
         this.listLoading = false
-        // console.log(this.list)
-        // // Just to simulate the time of the request
-        // setTimeout(() => {
-        //   this.listLoading = false
-        // }, 1.5 * 1000)
       })
     },
     handleFilter() {
@@ -379,8 +330,6 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          // this.temp.author = 'vue-element-admin'
           createUser(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
@@ -437,12 +386,6 @@ export default {
       })
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
     },
     handleDownload() {
       this.downloadLoading = true
