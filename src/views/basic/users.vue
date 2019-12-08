@@ -17,7 +17,7 @@
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
         导出
       </el-button>
-      <el-checkbox v-model="userQuery.status" true-label="1" false-label="0" class="filter-item" style="margin-left:15px;" @change="handleFilter">
+      <el-checkbox v-model="userQuery.status" true-label="1" false-label="" class="filter-item" style="margin-left:15px;" @change="handleFilter">
         不显示停用账户
       </el-checkbox>
     </div>
@@ -178,7 +178,7 @@ export default {
           value: ''
         },
         status: undefined,
-        sort: '+id'
+        sort: '-id'
       },
       userTypeOptions,
       sortOptions: [{ label: '正序排列', key: '+id' }, { label: '倒序排列', key: '-id' }],
