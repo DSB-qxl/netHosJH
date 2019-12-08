@@ -130,18 +130,7 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import elDragDialog from '@/directive/el-drag-dialog' // base on element-ui
 
-const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-]
 
-// arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
 
 const userTypeOptions = [
   { key: '2', display_name: '医生' },
@@ -149,7 +138,7 @@ const userTypeOptions = [
   { key: '3', display_name: '患者' }
 ]
 
-// arr to obj, such as { CN : "China", US : "USA" }
+// arr to obj
 const userTypeKeyValue = userTypeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
   return acc
@@ -179,14 +168,6 @@ export default {
       total: 0,
       count: 0,
       listLoading: true,
-      // listQuery: {
-      //   page: 1,
-      //   limit: 20,
-      //   importance: undefined,
-      //   title: undefined,
-      //   type: undefined,
-      //   sort: '+id'
-      // },
       userQuery: {
         page: 1,
         limit: 20,
