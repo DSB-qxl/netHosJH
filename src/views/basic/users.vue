@@ -37,7 +37,7 @@
           <span>{{ row.user_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="账号" width="150px" align="center">
+      <el-table-column label="账号" width="180px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.account }}</span>
         </template>
@@ -70,7 +70,7 @@
           <el-tag type="sucess" v-if="row.status==1" >正常</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" mini-width="320px" class-name="small-padding fixed-width">
+      <el-table-column label="操作" header-align="center" align="center" width="320px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -83,6 +83,12 @@
           </el-button>
           <el-button  size="mini" @click="handleReset(row)">
             重置
+          </el-button>
+          <el-button v-if="row.type==2" type="primary" size="mini" >
+            更多
+          </el-button>
+          <el-button v-if="row.type!=2" :disabled=true type="primary" size="mini" >
+            更多
           </el-button>
         </template>
       </el-table-column>
