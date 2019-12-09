@@ -2,17 +2,17 @@ import request from '@/utils/request-online'
 
 export function fetchUserList(query) {
   return request({
-    url: 'users',
+    url: '/users',
     method: 'get',
     baseURL: '/api',
     params: query
   })
 }
-
-export function fetchUser(id) {
+//重置密码
+export function restPassword(id) {
   return request({
-    url: '/users',
-    method: 'get',
+    url: '/password',
+    method: 'delete',
     params: { id }
   })
 }
@@ -30,6 +30,7 @@ export function updateUser(data) {
   return request({
     url: '/users',
     method: 'put',
+    baseURL: '/api',
     data
   })
 }

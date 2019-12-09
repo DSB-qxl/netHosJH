@@ -195,7 +195,7 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
+        update: '编辑',
         create: '新建用户'
       },
       dialogPvVisible: false,
@@ -254,7 +254,6 @@ export default {
     },
     handleFilter() {
       this.userQuery.page = 1
-      console.log(this.userQuery)
       this.getList()
     },
     handleModifyStatus(row, status) {
@@ -270,10 +269,12 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '重置密码成功!'
-          });
+          console.log(row.user_id)
+          //console.log(this.row.user_id)
+          // this.$message({
+          //   type: 'success',
+          //   message: '重置密码成功!'
+          // });
         })
     },
     sortChange(data) {
@@ -325,8 +326,10 @@ export default {
       })
     },
     handleUpdate(row) {
+      console.log(this.temp)
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
+      console.log(this.temp)
+      //this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -335,11 +338,11 @@ export default {
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
-        console.log(this.list)
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
+          //tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          console.log(tempData)
+          updateUser(tempData).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
                 const index = this.list.indexOf(v)
