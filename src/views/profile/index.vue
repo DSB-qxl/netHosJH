@@ -53,6 +53,7 @@ export default {
   },
   created() {
     this.getUser()
+    console.log(this.user)
   },
   methods: {
     getUser() {

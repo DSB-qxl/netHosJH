@@ -70,7 +70,12 @@
           <el-tag type="sucess" v-if="row.status==1" >正常</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" header-align="center" align="center" width="320px" class-name="small-padding fixed-width">
+      <el-table-column label="头像"  width="150" align="center">
+        <template slot-scope="{row}">
+          <img :src="row.avatar" class="avatar">
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" header-align="center" align="center" mini-width="320px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -176,7 +181,7 @@ export default {
       listLoading: true,
       userQuery: {
         page: 1,
-        limit: 20,
+        limit: 10,
         type: undefined,
         name: {
           key: '',
