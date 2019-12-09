@@ -237,19 +237,19 @@ export const asyncRoutes = [
         path: 'hospital',
         component: () => import('@/views/basic/hospital'),
         name: 'Hospital',
-        meta: { title: '医院信息', icon: 'hospital' }
+        meta: { title: '医院信息管理', icon: 'hospital' }
       },
       {
         path: 'department',
         component: () => import('@/views/basic/department'),
         name: 'Department',
-        meta: { title: '科室信息', icon: 'tree' },
+        meta: { title: '科室信息管理', icon: 'tree' },
       },
       {
         path: 'users',
         component: () => import('@/views/basic/users'),
         name: 'Users',
-        meta: { title: '用户信息', icon: 'peoples' }
+        meta: { title: '用户信息管理', icon: 'peoples' }
       }
     ]
   },
