@@ -298,7 +298,8 @@ export default {
         name: '',
         certificate_no: '',
         mobile: '',
-        user_type: ''
+        user_type: '',
+        status: 1
       }
     },
     handleCreate() {
@@ -317,7 +318,7 @@ export default {
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
-              message: 'Created Successfully',
+              message: '创建用户成功',
               type: 'success',
               duration: 2000
             })
