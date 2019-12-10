@@ -104,7 +104,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="账号" prop="account">
-          <el-input v-model="temp.account" />
+          <el-input :disabled="true" v-model="temp.account" />
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input v-model="temp.name" />
@@ -251,6 +251,7 @@ export default {
       this.listLoading = true
       fetchUserList(this.userQuery).then(response => {
         this.list = response.data.list
+        console.table(this.list)
         this.total = response.data.count
         this.listLoading = false
       })
@@ -346,7 +347,7 @@ export default {
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           let tempData = {}
           tempData = {
-            account: this.temp.account,
+            name: this.temp.name,
             certificate_no: this.temp.certificate_no,
             mobile: this.temp.mobile,
             type: this.temp.type,
@@ -355,22 +356,22 @@ export default {
           console.log(this.temp.user_id)
           console.log(tempData)
           console.log(this.list)
-          // updateUser(tempData).then(() => {
-          //   for (const v of this.list) {
-          //     if (v.user_id === this.temp.user_id) {
-          //       const index = this.list.indexOf(v)
-          //       this.list.splice(index, 1, this.temp)
-          //       break
-          //     }
-          //   }
-          //   this.dialogFormVisible = false
-          //   this.$notify({
-          //     title: 'Success',
-          //     message: 'Update Successfully',
-          //     type: 'success',
-          //     duration: 2000
-          //   })
-          // })
+          updateUser(this.temp.user_id,tempData).then(() => {
+            for (const v of this.list) {
+              if (v.user_id === this.temp.user_id) {
+                const index = this.list.indexOf(v)
+                this.list.splice(index, 1, this.temp)
+                break
+              }
+            }
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
       })
     },
