@@ -26,9 +26,9 @@ export function createUser(data) {
   })
 }
 
-export function updateUser(data) {
+export function updateUser(id, data) {
   return request({
-    url: '/users',
+    url: `/users/${id}`,
     method: 'put',
     baseURL: '/api',
     data
