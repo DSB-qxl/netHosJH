@@ -42,7 +42,7 @@
           <span>{{ row.account }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="身份证号"  width="210px" align="center">
+      <el-table-column label="身份证号" width="210px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.certificate_no }}</span>
         </template>
@@ -52,27 +52,22 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" width="100px" align="center" >
+      <el-table-column label="角色" width="100px" align="center">
         <template slot-scope="{row}">
-          <el-tag type="danger" v-if="row.type==1" >管理员</el-tag>
-          <el-tag type="sucess" v-if="row.type==2" >医生</el-tag>
-          <span v-if="row.type==3" >患者</span>
+          <el-tag v-if="row.type==1" type="danger">管理员</el-tag>
+          <el-tag v-if="row.type==2" type="sucess">医生</el-tag>
+          <span v-if="row.type==3">患者</span>
         </template>
       </el-table-column>
       <el-table-column label="手机号" width="150px" align="center">
         <template slot-scope="{row}">
-          <a :href= "'tel:'+row.mobile">{{ row.mobile }}</a>
+          <a :href="'tel:'+row.mobile">{{ row.mobile }}</a>
         </template>
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="100">
         <template slot-scope="{row}">
-          <el-tag type="danger" v-if="row.status==0" >已停用</el-tag>
-          <el-tag type="sucess" v-if="row.status==1" >正常</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="头像"  width="150" align="center">
-        <template slot-scope="{row}">
-          <img :src="row.avatar" class="avatar">
+          <el-tag v-if="row.status==0" type="danger">已停用</el-tag>
+          <el-tag v-if="row.status==1" type="sucess">正常</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" header-align="center" align="center" mini-width="320px" class-name="small-padding fixed-width">
@@ -86,13 +81,13 @@
           <el-button v-if="row.status!=0" size="mini" type="danger" @click="handleModifyStatus(row, 0)">
             停用
           </el-button>
-          <el-button  size="mini" @click="handleReset(row)">
+          <el-button size="mini" @click="handleReset(row)">
             重置
           </el-button>
-          <el-button v-if="row.type==2" type="primary" size="mini" >
+          <el-button v-if="row.type==2" type="primary" size="mini">
             更多
           </el-button>
-          <el-button v-if="row.type!=2" :disabled=true type="primary" size="mini" >
+          <el-button v-if="row.type!=2" :disabled="true" type="primary" size="mini">
             更多
           </el-button>
         </template>
@@ -101,7 +96,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="userQuery.page" :limit.sync="userQuery.limit" @pagination="getList" />
 
-    <el-dialog v-el-drag-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" @dragDialog="handleDrag" width="600px">
+    <el-dialog v-el-drag-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px" @dragDialog="handleDrag">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 450px; margin-left:50px;">
         <el-form-item label="类型" prop="type">
           <el-select ref="select" v-model="temp.type" class="filter-item" placeholder="请选择用户类型">
@@ -134,14 +129,11 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
 import { fetchUserList, createUser, updateUser } from '@/api/users'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import elDragDialog from '@/directive/el-drag-dialog' // base on element-ui
-
-
 
 const userTypeOptions = [
   { key: '2', display_name: '医生' },
@@ -185,7 +177,7 @@ export default {
         type: undefined,
         name: {
           key: '',
-          opt: 'like', 
+          opt: 'like',
           value: ''
         },
         status: undefined,
@@ -210,43 +202,43 @@ export default {
         create: '新建用户'
       },
       dialogPvVisible: false,
-      //表单校验
+      // 表单校验
       rules: {
         type: [{ required: true, message: '请选择用户类型', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }],
         account: [{
-            required: true, 
-            message: '请填写账号信息', 
-            trigger: 'blur' 
+          required: true,
+          message: '请填写账号信息',
+          trigger: 'blur'
         }, {
-            pattern: /^(\w){4,20}$/,
-            message: '账号长度为4到20个字符，只允许字母、数字、下划线'
+          pattern: /^(\w){4,20}$/,
+          message: '账号长度为4到20个字符，只允许字母、数字、下划线'
         }],
         name: [{ required: true, message: '姓名不允许为空', trigger: 'blur' }],
-        certificate_no: [{ 
-          required: true, 
-          message: '请填写身份证号', 
-          trigger: 'blur' 
-          }, {
-              pattern:/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/, 
-              message: '你的身份证格式不正确' 
-          }],
-        mobile:[{ 
+        certificate_no: [{
+          required: true,
+          message: '请填写身份证号',
+          trigger: 'blur'
+        }, {
+          pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+          message: '你的身份证格式不正确'
+        }],
+        mobile: [{
           required: true,
           message: '请输入手机号码',
           trigger: 'blur'
-          }, {
-              validator:function(rule,value,callback){
-                if(/^1[34578]\d{9}$/.test(value) == false){
-                  callback(new Error("请输入正确的手机号"));
-                }else{
-                  callback();
-                }
-              }, 
-              trigger: 'blur'}
-    ]
-    //   pattern: /^1[34578]\d{9}$/, message: '目前只支持中国大陆的手机号码' }
+        }, {
+          validator: function(rule, value, callback) {
+            if (/^1[34578]\d{9}$/.test(value) == false) {
+              callback(new Error('请输入正确的手机号'))
+            } else {
+              callback()
+            }
+          },
+          trigger: 'blur' }
+        ]
+        //   pattern: /^1[34578]\d{9}$/, message: '目前只支持中国大陆的手机号码' }
       },
       downloadLoading: false
     }
@@ -276,17 +268,17 @@ export default {
     },
     handleReset(row) {
       this.$confirm('此操作将重置该用户密码, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          console.log(row.user_id)
-          //console.log(this.row.user_id)
-          // this.$message({
-          //   type: 'success',
-          //   message: '重置密码成功!'
-          // });
-        })
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(row.user_id)
+        // console.log(this.row.user_id)
+        // this.$message({
+        //   type: 'success',
+        //   message: '重置密码成功!'
+        // });
+      })
     },
     sortChange(data) {
       const { prop, order } = data
@@ -339,7 +331,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      //this.temp.timestamp = new Date(this.temp.timestamp)
+      // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -350,13 +342,13 @@ export default {
       console.log(this.$refs['dataForm'])
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          //const tempData = Object.assign({}, this.temp)
-          //tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          // const tempData = Object.assign({}, this.temp)
+          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           let tempData = {}
           tempData = {
-            account: this.temp.account, 
-            certificate_no: this.temp.certificate_no, 
-            mobile: this.temp.mobile, 
+            account: this.temp.account,
+            certificate_no: this.temp.certificate_no,
+            mobile: this.temp.mobile,
             type: this.temp.type,
             status: this.temp.status
           }
@@ -430,5 +422,4 @@ export default {
   }
 }
 </script>
-
 
