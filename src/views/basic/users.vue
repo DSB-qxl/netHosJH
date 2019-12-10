@@ -338,9 +338,7 @@ export default {
       })
     },
     handleUpdate(row) {
-      console.log(this.temp)
       this.temp = Object.assign({}, row) // copy obj
-      console.log(this.temp)
       //this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -349,27 +347,38 @@ export default {
       })
     },
     updateData() {
+      console.log(this.$refs['dataForm'])
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
+          //const tempData = Object.assign({}, this.temp)
           //tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          let tempData = {}
+          tempData = {
+            account: this.temp.account, 
+            certificate_no: this.temp.certificate_no, 
+            mobile: this.temp.mobile, 
+            type: this.temp.type,
+            status: this.temp.status
+          }
+          console.log(this.temp.user_id)
           console.log(tempData)
-          updateUser(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
-              duration: 2000
-            })
-          })
+          console.log(this.list)
+          // updateUser(tempData).then(() => {
+          //   for (const v of this.list) {
+          //     if (v.user_id === this.temp.user_id) {
+          //       const index = this.list.indexOf(v)
+          //       this.list.splice(index, 1, this.temp)
+          //       break
+          //     }
+          //   }
+          //   this.dialogFormVisible = false
+          //   this.$notify({
+          //     title: 'Success',
+          //     message: 'Update Successfully',
+          //     type: 'success',
+          //     duration: 2000
+          //   })
+          // })
         }
       })
     },
