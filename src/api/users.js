@@ -9,11 +9,11 @@ export function fetchUserList(query) {
   })
 }
 //重置密码
-export function restPassword(id) {
+export function resetPassword(id) {
   return request({
-    url: '/password',
+    url: `/users/password/${id}`,
     method: 'delete',
-    params: { id }
+    baseURL: '/api'
   })
 }
 
