@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import { fetchUserList, createUser, updateUser } from '@/api/users'
+import { fetchUserList, createUser, updateUser, resetPassword } from '@/api/users'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -168,6 +168,7 @@ export default {
     return {
       tableKey: 0,
       list: null,
+      listAll: null,
       total: 0,
       count: 0,
       listLoading: true,
@@ -261,11 +262,25 @@ export default {
       this.getList()
     },
     handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
+      console.log(row)
+      console.log(status)
+      let rowData = {}
+          rowData = {
+            name: row.name,
+            certificate_no: row.certificate_no,
+            mobile: row.mobile,
+            type: row.type,
+            status: status
+          }
+      updateUser(row.user_id,rowData).then(() => {
+            row.status = status
+            this.$notify({
+              title: 'Success',
+              message: '成功改变用户状态',
+              type: 'success',
+              duration: 2000
+            })
+          })
     },
     handleReset(row) {
       this.$confirm('此操作将重置该用户密码, 是否继续?', '提示', {
@@ -274,11 +289,14 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(row.user_id)
-        // console.log(this.row.user_id)
-        // this.$message({
-        //   type: 'success',
-        //   message: '重置密码成功!'
-        // });
+        resetPassword(row.user_id).then(() => {
+          this.$notify({
+              title: 'Success',
+              message: '重置密码成功',
+              type: 'success',
+              duration: 2000
+            })
+        })
       })
     },
     sortChange(data) {
@@ -387,16 +405,21 @@ export default {
     },
     handleDownload() {
       this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
+      fetchUserList('').then(response => {
+        this.listAll = response.data.list
+        console.log(this.list)
+        console.log(this.listAll)
+        import('@/vendor/Export2Excel').then(excel => {
+          const tHeader = ['账号', '身份证号', '姓名', 'mobile', 'type']
+          const filterVal = ['account', 'certificate_no', 'name', 'mobile', 'type']
+          const data = this.formatJson(filterVal, this.listAll)
+          excel.export_json_to_excel({
+            header: tHeader,
+            data,
+            filename: '用户列表'
+          })
+          this.downloadLoading = false
         })
-        this.downloadLoading = false
       })
     },
     formatJson(filterVal, jsonData) {
